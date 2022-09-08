@@ -1,16 +1,17 @@
 import config from "./config/config"; //引入配置文件的mysql配置
 let mysql = require("mysql");
 const { mysqlConfig } = config;
-let connection = mysql.createConnection({
+let connection = mysql.createConnection({//创建数据库连接
   //创建mysql连接
-  host: mysqlConfig.host,
-  user: mysqlConfig.user,
-  password: mysqlConfig.password,
+  host: mysqlConfig.host,//数据库地址
+  user: mysqlConfig.user,//数据库用户名
+  password: mysqlConfig.password,//数据库密码
 });
 
 function querysql(sqlstr: string): any {
   //封装执行sql语句的函数
   return new Promise(function (resolve, reject) {
+    // query是执行一条mysql语句，第二个参数是sql语句执行的回调函数，error是执行是否有错，result是执行结构，filds是字段相关信息
     connection.query(sqlstr, function (error: Error, result: any, fileds: any) {
       if (error) {
         reject({ error });

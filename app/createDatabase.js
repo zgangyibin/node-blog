@@ -19,11 +19,12 @@ let connection = mysql.createConnection({
     //创建mysql连接
     host: mysqlConfig.host,
     user: mysqlConfig.user,
-    password: mysqlConfig.password,
+    password: mysqlConfig.password, //数据库密码
 });
 function querysql(sqlstr) {
     //封装执行sql语句的函数
     return new Promise(function (resolve, reject) {
+        // query是执行一条mysql语句，第二个参数是sql语句执行的回调函数，error是执行是否有错，result是执行结构，filds是字段相关信息
         connection.query(sqlstr, function (error, result, fileds) {
             if (error) {
                 reject({ error });

@@ -78,10 +78,6 @@ export default function(app:Express){
         res.render("getForm.html",{
         })
     })
-    app.get("/header.html",function(req:Request,res:Response):any{
-        res.render("header.html",{
-        })
-    })
     app.get("/hr.html",function(req:Request,res:Response):any{
         res.render("hr.html",{
         })

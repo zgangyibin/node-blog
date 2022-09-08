@@ -64,9 +64,6 @@ function default_1(app) {
     app.get("/getForm.html", function (req, res) {
         res.render("getForm.html", {});
     });
-    app.get("/header.html", function (req, res) {
-        res.render("header.html", {});
-    });
     app.get("/hr.html", function (req, res) {
         res.render("hr.html", {});
     });
