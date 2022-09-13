@@ -6,12 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express")); //ts版的express
 const pageController_1 = __importDefault(require("./controller/pageController"));
 const userController_1 = __importDefault(require("./controller/userController"));
-const captcha = require("svg-captcha");
-let ejs = require("ejs");
+const captcha = require("svg-captcha"); //验证码
+let ejs = require("ejs"); //ejs模板引擎
 let cookie = require("cookie-parser");
 let session = require("express-session");
 let bodyParser = require("body-parser"); //post数据解析模块
-let urlencodeParse = bodyParser.json({ limit: "50mb" }); //设置把post数据解析到body对象里
+let urlencodeParse = bodyParser.urlencoded({ extended: false }); //设置把post数据解析到body对象里
 var app = (0, express_1.default)();
 app.use(cookie('blogcookieandsession')); //设置cookie和session的秘钥
 app.use(session({
