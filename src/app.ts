@@ -7,11 +7,11 @@ let ejs = require("ejs");//ejs模板引擎
 let cookie = require("cookie-parser");
 let session = require("express-session");
 let bodyParser = require("body-parser");//post数据解析模块
-let urlencodeParse = bodyParser.urlencoded({extended:false});//设置把post数据解析到body对象里
+let urlencodeParse = bodyParser.json({limit:"50mb"});//设置把post数据解析到body对象里
 var app:Express = express();
-app.use(cookie('blogcookieandsession'));//设置cookie和session的秘钥
+app.use(cookie('blogcookieandsessionzcwyby'));//设置cookie和session的秘钥
 app.use(session({//前端访问后端，都会生成一个sessiId存到前端浏览器cookie里面
-    secret:"blogcookieandsession",
+    secret:"blogcookieandsessionzcwyby",
     resave:true,
     saveUninitialized:true,
     cookie:{maxAge:10*60*1000}

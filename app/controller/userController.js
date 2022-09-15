@@ -46,7 +46,7 @@ function default_1(app) {
             else {
                 if (result.length > 0) {
                     console.log(result);
-                    let token = jwt.sign({ id: result[0].id }, "111222myblog121212", {
+                    let token = jwt.sign({ id: result[0].id }, "zzz222myblog121wcy", {
                         expiresIn: 24 * 60 * 60 //配置token有效期为24小时
                     });
                     res.json({ success: true, token, data: result[0] });
