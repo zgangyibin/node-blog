@@ -18,7 +18,7 @@ function default_1(app, rootPath) {
     //添加博客
     app.post("/api/addBlog", function (req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            let data = yield blogModel_1.default.addBlog(req.body);
+            let data = yield blogModel_1.default.addBlog(Object.assign(Object.assign({}, req.body), { uid: req.uid }));
             const { err, result } = data;
             if (err) {
                 res.json({ success: false, message: err.message });
@@ -31,8 +31,8 @@ function default_1(app, rootPath) {
     //获取博客列表
     app.post("/api/getBlogList", function (req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { page } = req.body; // 获取？后传递的参数用query
-            const uid = req.uid;
+            const { page } = req.body;
+            const uid = req.uid; //uid从token中解析出来的
             let data = yield blogModel_1.default.getList(uid, Number(page));
             let { err, result } = data;
             console.log(uid, "用户uid");
@@ -48,6 +48,20 @@ function default_1(app, rootPath) {
             res.json({ success: true, data: result, total: data.result[0].total });
         });
     }),
+        //返回博客详情
+        app.post("/api/getDetail", function (req, res) {
+            return __awaiter(this, void 0, void 0, function* () {
+                const { id } = req.query; // 获取？后传递的参数用query
+                const uid = req.uid; //uid从token中解析出来的
+                let data = yield blogModel_1.default.getBlogDetail(id);
+                let { err, result } = data;
+                if (err) {
+                    res.json({ success: false, message: err.message });
+                    return;
+                }
+                res.json({ success: true, data: result[0] });
+            });
+        }),
         //删除
         app.get("/api/delBlog", function (req, res) {
             return __awaiter(this, void 0, void 0, function* () {

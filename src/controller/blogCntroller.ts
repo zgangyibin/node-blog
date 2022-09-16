@@ -4,7 +4,7 @@ let fs = require("fs");
 export default function(app:Express,rootPath:string){ 
     //添加博客
     app.post("/api/addBlog",async function(req:Request,res:Response){
-        let data:any =await blogModel.addBlog(req.body)
+        let data:any =await blogModel.addBlog({...req.body,uid:(req as any).uid})
         const {err,result} = data;
         if(err){
             res.json({success:false,message:err.message});
@@ -14,8 +14,8 @@ export default function(app:Express,rootPath:string){
     });
     //获取博客列表
     app.post("/api/getBlogList",async function(req:Request,res:Response){ // 用户注册接口
-        const { page } = req.body; // 获取？后传递的参数用query
-        const uid:string = (req as any).uid;
+        const { page } = req.body; 
+        const uid:string = (req as any).uid;//uid从token中解析出来的
         let data:any = await blogModel.getList(uid,Number(page));
         let {err, result} = data;
         console.log(uid, "用户uid")
@@ -29,6 +29,18 @@ export default function(app:Express,rootPath:string){
           return;
         }
         res.json({success: true, data: result, total: data.result[0].total});
+      }),
+    //返回博客详情
+    app.post("/api/getDetail",async function(req:Request,res:Response){ // 用户注册接口
+        const { id } = req.query; // 获取？后传递的参数用query
+        const uid:string = (req as any).uid;//uid从token中解析出来的
+        let data:any = await blogModel.getBlogDetail(id);
+        let {err, result} = data;
+        if(err){
+        res.json({success:false, message: err.message})
+        return;
+        }
+        res.json({success: true, data: result[0]});
       }),
     //删除
     app.get("/api/delBlog",async function(req:Request,res:Response){

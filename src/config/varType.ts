@@ -12,6 +12,8 @@ interface BlogData {
     blogType:string,
     uid?:string,
     createTime:string,
+    img?:string,
+    detail?:string
 }
 
 export {

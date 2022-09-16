@@ -3,7 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 let jwt = require("jsonwebtoken");
 const whiteRoute = [
     "/api/addCreateAdminUser",
-    "/api/adminLogin"
+    "/api/adminLogin",
+    "/yzm"
 ];
 const middleArea = (app) => {
     //app.use是可以做中间键，所有路由进来之前都会先过app.use方法,类似路由守卫
@@ -11,7 +12,8 @@ const middleArea = (app) => {
     app.use(function (req, res, next) {
         // 在中间键验证需要token校验的路由，并不是每个路由都需要校验，需要白名单放入不校验的路由
         console.log(req.url);
-        if (whiteRoute.includes(req.url)) {
+        let reg = /\/yzm\??.*/; //匹配验证码，路由后带有查询参数
+        if (whiteRoute.includes(req.url) || reg.test(req.url)) {
             next();
         }
         else {
