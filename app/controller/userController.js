@@ -15,10 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const userModel_1 = __importDefault(require("../model/userModel"));
 let jwt = require("jsonwebtoken"); //引入生成token模块
 function default_1(app) {
-    app.post("/api/register", function (req, res) {
+    //添加用户
+    app.post("/api/addCreateAdminUser", function (req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const { email, password, nick } = req.body;
-            let data = yield userModel_1.default.register(email, password, nick);
+            const { username, password, nick } = req.body;
+            let data = yield userModel_1.default.register(username, password, nick);
             const { err, result } = data;
             if (err) {
                 res.json({ success: false, message: err.message });
@@ -57,6 +58,7 @@ function default_1(app) {
             }
         });
     });
+    //获取用户列表
     app.get("/api/getAdminUserList", function (req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { page } = req.query;
@@ -72,6 +74,34 @@ function default_1(app) {
                 else {
                     res.json({ success: true, data: result, page });
                 }
+            }
+        });
+    });
+    //删除
+    app.get("/api/delAdminUser", function (req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { id } = req.query;
+            let data = yield userModel_1.default.delAdminUser(id);
+            const { err, result } = data;
+            if (err) {
+                res.json({ success: false, message: err.message });
+            }
+            else {
+                res.json({ success: true, data: result });
+            }
+        });
+    });
+    //修改用户
+    app.post("/api/updateAdminUser", function (req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { password, nick, id } = req.body;
+            let data = yield userModel_1.default.updateAdminUser(password, nick, id);
+            const { err, result } = data;
+            if (err) {
+                res.json({ success: false, message: err.message });
+            }
+            else {
+                res.json({ success: true, message: "注册成功" });
             }
         });
     });
