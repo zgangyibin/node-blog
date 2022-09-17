@@ -31,7 +31,7 @@ export default function(app:Express,rootPath:string){
         res.json({success: true, data: result, total: data.result[0].total});
       }),
     //返回博客详情
-    app.post("/api/getDetail",async function(req:Request,res:Response){ // 用户注册接口
+    app.get("/api/getDetail",async function(req:Request,res:Response){ // 用户注册接口
         const { id } = req.query; // 获取？后传递的参数用query
         const uid:string = (req as any).uid;//uid从token中解析出来的
         let data:any = await blogModel.getBlogDetail(id);
@@ -43,8 +43,8 @@ export default function(app:Express,rootPath:string){
         res.json({success: true, data: result[0]});
       }),
     //删除
-    app.get("/api/delBlog",async function(req:Request,res:Response){
-        const { id } = req.query;
+    app.post("/api/delBlog",async function(req:Request,res:Response){
+        const { id } = req.body;
         let data:any = await blogModel.delBlog(id);
         const {err,result} = data;
         if(err){

@@ -1,5 +1,7 @@
 import { Request,Response,Express} from "../config/varType"; 
 const captcha =require("svg-captcha");
+import blogModel from "../model/blogModel";
+import userModel from "../model/userModel";
 export default function(app:Express){ 
     app.get("/",function(req:Request,res:Response):any{
         res.render("index.html",{
@@ -179,5 +181,17 @@ export default function(app:Express){
         res.setHeader("Content-type","image/svg+xml");
         res.write(String(yzmImg.data));
         res.end();
+    })
+    // 数据汇总
+    app.get("/api/getOrdersEchartData",async function(req:Request,res:Response){
+        const uid  = (req as any).uid;
+        let data1:any = await blogModel.getListCount(uid);//获取博客总数
+        const data2:any = await userModel.getListCount();//获取用户总数
+        const data3:any = await blogModel.getBlogCharts(uid);//获取博客chart数据
+        if(data1.err || data2.err || data3.err){
+            res.json({success:false,message:"获取chart数据出错"});
+        }else {
+            res.json({success:true,data:[data1.result,data2.result,data3.result]});
+        }
     })
 }

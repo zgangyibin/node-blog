@@ -35,7 +35,7 @@ export default {
             // 如果直接把前端的字符串拼接到sql语句，容易被sql注入攻击。
             // 需要把前端输入的内容作为字符串，用？占位符。
             // limit start, count; 限制数据显示条数。start开始显示数据的条，count总共显示多少条。
-            const sqlstr = `select blog.id,blog.title,blog.img,blog.keywords,blog.readCount,blog.blogType,blog.createTime,users.nick from users,blog where blog.uid=users.id and blog.uid=? order by id desc limit ?,20`;
+            const sqlstr = `select blog.id,blog.title,blog.cover,blog.keywords,blog.readCount,blog.blogType,blog.createTime,blog.showBlog,blog.description,users.nick from users,blog where blog.uid=users.id and blog.uid=? order by id desc limit ?,20`;
             const sqlstrParam = [uid, (page-1)*20]
             conn.query(sqlstr,sqlstrParam,function(err:Error,result: any){
               conn.release();
@@ -72,9 +72,6 @@ export default {
               conn.release();
               return;
             }
-            // 如果直接把前端的字符串拼接到sql语句，容易被sql注入攻击。
-            // 需要把前端输入的内容作为字符串，用？占位符。
-            // limit start, count; 限制数据显示条数。start开始显示数据的条，count总共显示多少条。
             const sqlstr = `select count(id) as total from blog where uid=?`;
             const sqlstrParam = [uid]
             conn.query(sqlstr,sqlstrParam,function(err:Error,result: any){
@@ -84,6 +81,24 @@ export default {
           })
         }).then((data)=>data).catch((err)=>err)
       },
+        //获取博客chart数据
+        getBlogCharts(uid:string){
+          return new Promise((resolve,reject)=>{
+            mysqlPool.getConnection(function(err:Error,conn:any){
+              if(err){
+                reject({err})
+                conn.release();
+                return;
+              }
+              const sqlstr = `select createTime,id from blog where uid=?`;
+              const sqlstrParam = [uid]
+              conn.query(sqlstr,sqlstrParam,function(err:Error,result: any){
+                conn.release();
+                resolve({err, result});
+              })
+            })
+          }).then((data)=>data).catch((err)=>err)
+        },
     //删除博客
     delBlog(id:any){
     return new Promise((resolve,reject)=>{
@@ -112,10 +127,10 @@ export default {
                  return;
                 }
                 const {
-                    title,keywords,description,content,cover,showBlog,blogType,id
+                    title,keywords,description,detail,img,showBlog,blogType,id
                 }=data;
                 const sqlstr = "update blog set title=?,keywords=?,description=?,content=?,cover=?,showBlog=?,blogType=? where id=?";
-                const sqlstrParmas = [title,keywords,description,content,cover,showBlog,blogType,id];
+                const sqlstrParmas = [title,keywords,description,detail,img,showBlog,blogType,id];
                 conn.query(sqlstr,sqlstrParmas,function(err:Error,result:any){
                    resolve({err,result});
                 })

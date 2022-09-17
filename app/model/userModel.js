@@ -57,6 +57,22 @@ exports.default = {
             });
         }).then((data) => data).catch((err) => err);
     },
+    //获取用户总数
+    getListCount() {
+        return new Promise((resolve, reject) => {
+            mysql_1.default.getConnection(function (err, conn) {
+                if (err) {
+                    reject({ err });
+                    conn.release(); //释放连接对象，还回连接池
+                    return;
+                }
+                const sqlstr = `select count(id) as total from users`;
+                conn.query(sqlstr, function (err, result) {
+                    resolve({ err, result });
+                });
+            });
+        }).then((data) => data).catch((err) => err);
+    },
     //删除用户
     delAdminUser(id) {
         return new Promise((resolve, reject) => {

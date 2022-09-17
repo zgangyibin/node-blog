@@ -49,7 +49,7 @@ function default_1(app, rootPath) {
         });
     }),
         //返回博客详情
-        app.post("/api/getDetail", function (req, res) {
+        app.get("/api/getDetail", function (req, res) {
             return __awaiter(this, void 0, void 0, function* () {
                 const { id } = req.query; // 获取？后传递的参数用query
                 const uid = req.uid; //uid从token中解析出来的
@@ -63,9 +63,9 @@ function default_1(app, rootPath) {
             });
         }),
         //删除
-        app.get("/api/delBlog", function (req, res) {
+        app.post("/api/delBlog", function (req, res) {
             return __awaiter(this, void 0, void 0, function* () {
-                const { id } = req.query;
+                const { id } = req.body;
                 let data = yield blogModel_1.default.delBlog(id);
                 const { err, result } = data;
                 if (err) {
